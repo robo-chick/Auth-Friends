@@ -5,9 +5,13 @@ import FriendsCard from './FriendsCard';
 const Friends = () => {
     const [friends, setFriends] = useState([]);
     const [newFriend, setNewFriend] = useState({
+        id: "",
         name: "",
-        age: ""
+        age: "",
+        email: "",
+        value: ""
     });
+    const [id, setId] = useState("");
 
     useEffect(() => {
         const getData = () => {
@@ -15,7 +19,7 @@ const Friends = () => {
             axiosWithAuth()
                 .get("/friends")
                 .then(res => {
-                    console.log(res, "Friends get");
+                    console.log(res, "Friends");
                     setFriends(res.data);
                 })
                 .catch(err => console.log(err));
@@ -47,22 +51,47 @@ const Friends = () => {
         });
     };
 
+    //stretch - delete friend
+    const handleDeleteForm = e => {
+        e.preventDefault();
+        console.log(id);
+        setId(e.target.value);
+    };
+
+
+    const removeFriend = e => {
+        e.target.reset();
+        axiosWithAuth()
+            .delete(`/friends/${id}`)
+            .then(res => {
+                console.log("delete", res)
+                setNewFriend(res.data);
+            });
+    };
+
     return (
         <div>
-            <h1>Dashboard</h1>
+            <h1>Add Friend</h1>
             <form onSubmit={addFriend}>
                 <input
                     type="text" 
                     name="name"
                     onChange={inputChange}
-                    placeholder="name"
+                    placeholder="Name"
                     required
                 />
                 <input
                     type="number" 
                     name="age"
                     onChange={inputChange}
-                    placeholder="age"
+                    placeholder="Age"
+                    required
+                />
+                <input
+                    type="email"
+                    name="email"
+                    onChange={inputChange}
+                    placeholder="Email"
                     required
                 />
                 <button>Submit</button>
@@ -71,6 +100,18 @@ const Friends = () => {
                 {friends.map(friend => (
                     <FriendsCard key={friend.id} friend={friend} />
                 ))}
+            </div>
+            <div>
+                <h2>Remove Friend</h2>
+                <form onSubmit={removeFriend}>
+                    <input
+                        type="text"
+                        name="id"
+                        onChange={handleDeleteForm}
+                        placeholder="Id"
+                    />
+                    <button>Remove</button>
+                </form>
             </div>
         </div>
     )}
