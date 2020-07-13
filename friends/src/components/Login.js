@@ -1,10 +1,28 @@
-import React, {useState} from 'react';
-import {axiosWithAuth} from '../utils/axiosWithAuth';
+import React, { useState } from 'react';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 
-const Login = (props) => {
+import { makeStyles, useTheme} from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles(theme => ({
+    loginButton: {
+        ...theme.typography.button,
+        "&:hover": {
+            backgroundColor: theme.palette.primary.light
+        }
+    }
+}));
+
+export default function Login(props) {
+    const classes = useStyles();
+    const theme = useTheme();
+
+
     const [credentials, setCredentials] = useState({
-            username: "",
-            password: ""
+        username: "",
+        password: ""
     });
 
     const handleChange = e => {
@@ -30,28 +48,33 @@ const Login = (props) => {
     };
 
     return (
-        <div>
-            <form onSubmit={login}>
-                <label htmlFor="username">Username:</label>
-                <input
-                    id="username"
-                    type="text"
-                    name="username"
-                    value={credentials.username}
-                    onChange={handleChange}
-                />
-                <label htmlFor="password:">Password:</label>
-                <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    value={credentials.password}
-                    onChange={handleChange}
-                />
-                <button>Log In</button>
-            </form>
-        </div>
+        <Grid item container direction="row">
+            <Grid item container direction="row">
+                <Grid item>
+                        <TextField
+                            type="text"
+                            name="username"
+                            label="Username"
+                            value={credentials.username}
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            type="password"
+                            name="password"
+                            label="Password"
+                            value={credentials.password}
+                            onChange={handleChange}
+                        />
+                    <Grid item>
+                        <Button 
+                        variant="contained"
+                        onClick={login}
+                        className={classes.loginButton}>Login</Button>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
     )
 };
 
-export default Login;
+

@@ -97,6 +97,7 @@ const Friends = () => {
                 <button>Submit</button>
             </form>
             <div>
+                <h2>Friends List</h2>
                 {friends.map(friend => (
                     <FriendsCard key={friend.id} friend={friend} />
                 ))}
